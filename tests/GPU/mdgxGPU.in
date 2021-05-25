@@ -1,0 +1,19 @@
+&files
+  -osf     .out
+  -rsf     .rst
+  -xsf     .cdf
+&end
+
+&cntrl
+  irest = 0,
+  DoRATTLE = 0,     RattleTol = 1.0e-6,
+  dt = 0.004,       nstlim = 50000,
+  ntpr = 500,      ntwr   = 50000,   ntwx = 2500,
+  temp0 = 300.0,    ntt = 3,           gamma_ln = 1.0,
+  igseed = 913578,  ioutfm = 1,
+&end
+
+&pptd
+  igb = 6,
+  oligomer -p Pro1AIE.top -c Pro1AIE.rst -o Pro1AIE_MTS -x Pro1AIE_MTS -r Pro1AIE_MTS N-rep 1
+&end

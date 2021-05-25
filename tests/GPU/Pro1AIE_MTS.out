@@ -1,0 +1,784 @@
+<++>-----------------------------------------------------------------------<++>
+<++> mdgx: A molecular dynamics engine in the AMBER suite of programs      <++>
+<++>                                                                       <++>
+<++> Written by David S. Cerutti, Case Group (2009)                        <++>
+<++>-----------------------------------------------------------------------<++>
+
+Run on Tue May 25 16:20:13 2021
+
+INPUT FILE ASSIGNMENTS:
+ Designation         Base name                                       Suffix
+ -----------------   ---------------------------------------------   ----------
+ Input File          mdgxGPU.in                                      NONE
+ Input Coordinates   Pro1AIE.rst                                     NONE
+ Topology            Pro1AIE.top                                     NONE
+
+OUTPUT FILE ASSIGNMENTS:
+ Designation         Base name                                       Suffix
+ -----------------   ---------------------------------------------   ----------
+ State Information   Pro1AIE_MTS                                     .out    
+ Restart file        restrt                                          .rst    
+ Coordinate Traj.    mdcrd                                           .cdf    
+
+!!! Output overwriting is ENABLED !!!
+<++>-----------------------------------------------------------------------<++>
+
+INPUT LINE TEXT:
+
+/ccs/home/djh992/Tools/amber_build_test/bin/mdgx.cuda -O -i mdgxGPU.in 
+
+
+INPUT FILE TEXT:
+
+&files
+  -osf     .out
+  -rsf     .rst
+  -xsf     .cdf
+&end
+
+&cntrl
+  irest = 0,
+  DoRATTLE = 0,     RattleTol = 1.0e-6,
+  dt = 0.004,       nstlim = 50000,
+  ntpr = 500,      ntwr   = 50000,   ntwx = 2500,
+  temp0 = 300.0,    ntt = 3,           gamma_ln = 1.0,
+  igseed = 913578,  ioutfm = 1,
+&end
+
+&pptd
+  igb = 6,
+  oligomer -p Pro1AIE.top -c Pro1AIE.rst -o Pro1AIE_MTS -x Pro1AIE_MTS -r Pro1AIE_MTS N-rep 1
+&end
+<++>-----------------------------------------------------------------------<++>
+
+<++>-----------------------------------------------------------------------<++>
+(1.) SYSTEM SPECIFICATIONS
+
+ Number of atoms:               522     Number of residues:              31
+ Number of rigid waters:          0     Number of extra points:           0
+
+ Bonds with hydrogen:           257     Bonds without hydrogen:         268
+ Number of bond types:           44
+
+ Number of angles:              939     Number of angle types:          103
+ Number of dihedrals:          2263     Number of dihedral types:       137
+
+ Total system charge:     -2.000000     Number of vdW types:             12
+
+<++>-----------------------------------------------------------------------<++>
+
+<++>-----------------------------------------------------------------------<++>
+(2.) CONTROL DATA FOR THE RUN
+
+Mode of operation: ENERGY MINIMIZATION
+
+Nature and format of input:
+ - Dynamics are beginning from input coordinates.
+
+Nature and format of output:
+ - State information / diagnostics:     500 steps
+ - Restart / checkpoint file:         50000 steps
+ - Coordinate sets output:             2500 steps
+<++>-----------------------------------------------------------------------<++>
+
+<++>-----------------------------------------------------------------------<++>
+(3.) NONBONDED INTERACTIONS
+
+Simulation entails a non-periodic system with no cutoff.
+
+The CUDA implicit solvent simulation module in mdgx is designed for maximum 
+throughput with many small systems running concurrently.
+
+Forces in this module are computed in 32-bit floating point precision and 
+accumulated in 32-bit integers.  This places strict limits on the sizes of 
+forces that can be represented: +/- 4096 kcal/mol-A.  Forces that fall outside 
+this range will wrap the format and introduce wild errors in the dynamics, but 
+no well-behaved system suitable for simulations in Amber should display such 
+energy gradients.
+
+Energies are likewise accumulated in 32-bit integers, and therefore rounded at 
+several levels.  Bond, angle, and dihedral terms accumulate energy with a 
+precision of 1/65536 of one kcal/mol per interaction.  The sum of many 
+interactions will display error in accordance will all such terms' energies 
+being rounded towards zero by such an increment.  Non-bonded interactions 
+accumulate in local tiles at a precision of 1/16384 of one kcal/mol, then get 
+rounded to 1 part in 4096 kcal/mol for summation into the complete value. 
+ Energies produced by the CPU and GPU versions of the code are expected to 
+match to within a few thousandths of a kcal/mol for bonds, angles, and 
+dihedrals, and to within a few hundredths of a kcal/mol for non-bonded 
+interactions.  The dynamics is identical regardless of the precision of 
+energies.
+
+<++>-----------------------------------------------------------------------<++>
+
+<++>-----------------------------------------------------------------------<++>
+ (4.) SYSTEM TOPOLOGY AND CONFORMATION
+
+ - Checking chirality of standard amino acids.
+ - Checking for omitted disulfides.
+ - Checking for (nonstandard) Lennard-Jones combining rules.
+ - Lorentz-Berthelot combining rules are in effect.
+ - No problems with the topology detected.
+
+<++>-----------------------------------------------------------------------<++>
+
+<++>-----------------------------------------------------------------------<++>
+ (5.) GPU UTILIZATION
+
+ - GPU Model: Tesla V100-SXM2-16GB
+
+ - GPU Architecture:           7.0
+ - Streaming Multiprocessors:  80
+ - Max threads per SMP:        2048
+ - Simulation block size:      1024 threads
+ - Block grid size:            80
+<++>-----------------------------------------------------------------------<++>
+
+<++>-----------------------------------------------------------------------<++>
+ (6.) RESULTS
+
+\\\
+ Step:                 0   Time:           -1.0000
+ Temperature:   306.0401
+ Etot:          -32.4424   EKtot:         475.2832   EPtot:        -507.7255
+ Bond:          163.4367   Angle:         251.8671   Dihedral:      388.5085
+ Elec:        -1276.3279   vdW:           -35.2101   Solvent:         0.0000
+\\\
+ Step:               500   Time:            1.0000
+ Temperature:   313.7225
+ Etot:         -244.9457   EKtot:         487.2139   EPtot:        -732.1596
+ Bond:          181.5785   Angle:         267.5523   Dihedral:      413.2563
+ Elec:        -1586.3784   vdW:            -8.1683   Solvent:         0.0000
+\\\
+ Step:              1000   Time:            3.0000
+ Temperature:   303.4600
+ Etot:         -347.8380   EKtot:         471.2762   EPtot:        -819.1142
+ Bond:          199.7570   Angle:         278.9530   Dihedral:      420.4970
+ Elec:        -1709.5129   vdW:            -8.8083   Solvent:         0.0000
+\\\
+ Step:              1500   Time:            5.0000
+ Temperature:   313.7609
+ Etot:         -362.3944   EKtot:         487.2737   EPtot:        -849.6681
+ Bond:          194.3196   Angle:         251.5145   Dihedral:      431.6715
+ Elec:        -1706.8231   vdW:           -20.3506   Solvent:         0.0000
+\\\
+ Step:              2000   Time:            7.0000
+ Temperature:   295.8494
+ Etot:         -417.6411   EKtot:         459.4568   EPtot:        -877.0979
+ Bond:          178.3014   Angle:         254.2397   Dihedral:      429.9156
+ Elec:        -1739.6328   vdW:             0.0782   Solvent:         0.0000
+\\\
+ Step:              2500   Time:            9.0000
+ Temperature:   315.0549
+ Etot:         -385.2431   EKtot:         489.2831   EPtot:        -874.5262
+ Bond:          192.6941   Angle:         257.1720   Dihedral:      429.7585
+ Elec:        -1744.1147   vdW:           -10.0360   Solvent:         0.0000
+\\\
+ Step:              3000   Time:           11.0000
+ Temperature:   288.6252
+ Etot:         -434.4100   EKtot:         448.2376   EPtot:        -882.6476
+ Bond:          194.3449   Angle:         267.2757   Dihedral:      415.4333
+ Elec:        -1724.1011   vdW:           -35.6003   Solvent:         0.0000
+\\\
+ Step:              3500   Time:           13.0000
+ Temperature:   313.0952
+ Etot:         -395.5174   EKtot:         486.2398   EPtot:        -881.7572
+ Bond:          196.7891   Angle:         264.2217   Dihedral:      418.4487
+ Elec:        -1757.1717   vdW:            -4.0449   Solvent:         0.0000
+\\\
+ Step:              4000   Time:           15.0000
+ Temperature:   287.5376
+ Etot:         -431.9699   EKtot:         446.5485   EPtot:        -878.5184
+ Bond:          203.6329   Angle:         268.1297   Dihedral:      415.9795
+ Elec:        -1738.6825   vdW:           -27.5780   Solvent:         0.0000
+\\\
+ Step:              4500   Time:           17.0000
+ Temperature:   306.4547
+ Etot:         -415.8260   EKtot:         475.9270   EPtot:        -891.7530
+ Bond:          188.7481   Angle:         258.4702   Dihedral:      419.1792
+ Elec:        -1738.1707   vdW:           -19.9797   Solvent:         0.0000
+\\\
+ Step:              5000   Time:           19.0000
+ Temperature:   302.8308
+ Etot:         -451.7954   EKtot:         470.2990   EPtot:        -922.0944
+ Bond:          184.8595   Angle:         253.1581   Dihedral:      421.9745
+ Elec:        -1775.6161   vdW:            -6.4704   Solvent:         0.0000
+\\\
+ Step:              5500   Time:           21.0000
+ Temperature:   289.7064
+ Etot:         -455.3379   EKtot:         449.9167   EPtot:        -905.2546
+ Bond:          179.7084   Angle:         269.0634   Dihedral:      412.2869
+ Elec:        -1749.5300   vdW:           -16.7834   Solvent:         0.0000
+\\\
+ Step:              6000   Time:           23.0000
+ Temperature:   289.7359
+ Etot:         -469.1114   EKtot:         449.9626   EPtot:        -919.0740
+ Bond:          194.6733   Angle:         246.6227   Dihedral:      413.3611
+ Elec:        -1773.2914   vdW:            -0.4398   Solvent:         0.0000
+\\\
+ Step:              6500   Time:           25.0000
+ Temperature:   290.5743
+ Etot:         -482.0839   EKtot:         451.2645   EPtot:        -933.3484
+ Bond:          164.9634   Angle:         247.9076   Dihedral:      414.3245
+ Elec:        -1757.2085   vdW:            -3.3354   Solvent:         0.0000
+\\\
+ Step:              7000   Time:           27.0000
+ Temperature:   299.6941
+ Etot:         -435.2748   EKtot:         465.4277   EPtot:        -900.7025
+ Bond:          197.3643   Angle:         245.3203   Dihedral:      417.9527
+ Elec:        -1759.8598   vdW:            -1.4800   Solvent:         0.0000
+\\\
+ Step:              7500   Time:           29.0000
+ Temperature:   292.6702
+ Etot:         -451.6694   EKtot:         454.5196   EPtot:        -906.1890
+ Bond:          165.5226   Angle:         261.3596   Dihedral:      438.0492
+ Elec:        -1747.2419   vdW:           -23.8785   Solvent:         0.0000
+\\\
+ Step:              8000   Time:           31.0000
+ Temperature:   291.1242
+ Etot:         -501.4380   EKtot:         452.1185   EPtot:        -953.5565
+ Bond:          163.2499   Angle:         241.3715   Dihedral:      415.1560
+ Elec:        -1757.3009   vdW:           -16.0331   Solvent:         0.0000
+\\\
+ Step:              8500   Time:           33.0000
+ Temperature:   311.8852
+ Etot:         -412.0412   EKtot:         484.3606   EPtot:        -896.4018
+ Bond:          196.0757   Angle:         265.6196   Dihedral:      412.2323
+ Elec:        -1761.0640   vdW:            -9.2655   Solvent:         0.0000
+\\\
+ Step:              9000   Time:           35.0000
+ Temperature:   313.2794
+ Etot:         -389.0548   EKtot:         486.5258   EPtot:        -875.5807
+ Bond:          191.0421   Angle:         276.6858   Dihedral:      420.7252
+ Elec:        -1753.4229   vdW:           -10.6109   Solvent:         0.0000
+\\\
+ Step:              9500   Time:           37.0000
+ Temperature:   303.4870
+ Etot:         -443.4685   EKtot:         471.3182   EPtot:        -914.7866
+ Bond:          174.0573   Angle:         260.9427   Dihedral:      420.1717
+ Elec:        -1767.9348   vdW:            -2.0234   Solvent:         0.0000
+\\\
+ Step:             10000   Time:           39.0000
+ Temperature:   318.1264
+ Etot:         -437.4569   EKtot:         494.0533   EPtot:        -931.5101
+ Bond:          179.3292   Angle:         259.2109   Dihedral:      437.9531
+ Elec:        -1777.4237   vdW:           -30.5797   Solvent:         0.0000
+\\\
+ Step:             10500   Time:           41.0000
+ Temperature:   306.1662
+ Etot:         -450.6651   EKtot:         475.4790   EPtot:        -926.1441
+ Bond:          192.2773   Angle:         239.1608   Dihedral:      429.7090
+ Elec:        -1761.8704   vdW:           -25.4207   Solvent:         0.0000
+\\\
+ Step:             11000   Time:           43.0000
+ Temperature:   288.7750
+ Etot:         -442.9044   EKtot:         448.4703   EPtot:        -891.3747
+ Bond:          199.2579   Angle:         273.3085   Dihedral:      419.2749
+ Elec:        -1761.2783   vdW:           -21.9377   Solvent:         0.0000
+\\\
+ Step:             11500   Time:           45.0000
+ Temperature:   296.6373
+ Etot:         -430.3664   EKtot:         460.6805   EPtot:        -891.0469
+ Bond:          191.3429   Angle:         286.5254   Dihedral:      417.0499
+ Elec:        -1778.0338   vdW:            -7.9312   Solvent:         0.0000
+\\\
+ Step:             12000   Time:           47.0000
+ Temperature:   307.0720
+ Etot:         -428.8219   EKtot:         476.8857   EPtot:        -905.7076
+ Bond:          196.4741   Angle:         265.7130   Dihedral:      415.9501
+ Elec:        -1743.3593   vdW:           -40.4854   Solvent:         0.0000
+\\\
+ Step:             12500   Time:           49.0000
+ Temperature:   295.6242
+ Etot:         -451.5264   EKtot:         459.1072   EPtot:        -910.6336
+ Bond:          196.7654   Angle:         271.9934   Dihedral:      412.1548
+ Elec:        -1780.5890   vdW:           -10.9582   Solvent:         0.0000
+\\\
+ Step:             13000   Time:           51.0000
+ Temperature:   290.4531
+ Etot:         -482.8596   EKtot:         451.0763   EPtot:        -933.9359
+ Bond:          170.7537   Angle:         282.8754   Dihedral:      424.3546
+ Elec:        -1793.6800   vdW:           -18.2396   Solvent:         0.0000
+\\\
+ Step:             13500   Time:           53.0000
+ Temperature:   283.8713
+ Etot:         -493.1939   EKtot:         440.8547   EPtot:        -934.0487
+ Bond:          184.6698   Angle:         264.9790   Dihedral:      423.5374
+ Elec:        -1799.6524   vdW:            -7.5825   Solvent:         0.0000
+\\\
+ Step:             14000   Time:           55.0000
+ Temperature:   324.8658
+ Etot:         -408.7853   EKtot:         504.5197   EPtot:        -913.3050
+ Bond:          196.3066   Angle:         274.3717   Dihedral:      419.4184
+ Elec:        -1808.0287   vdW:             4.6269   Solvent:         0.0000
+\\\
+ Step:             14500   Time:           57.0000
+ Temperature:   310.4062
+ Etot:         -439.9583   EKtot:         482.0637   EPtot:        -922.0220
+ Bond:          201.8205   Angle:         247.0977   Dihedral:      414.5442
+ Elec:        -1793.9546   vdW:             8.4701   Solvent:         0.0000
+\\\
+ Step:             15000   Time:           59.0000
+ Temperature:   290.1035
+ Etot:         -480.6442   EKtot:         450.5334   EPtot:        -931.1775
+ Bond:          194.6742   Angle:         283.7631   Dihedral:      424.3383
+ Elec:        -1802.1143   vdW:           -31.8388   Solvent:         0.0000
+\\\
+ Step:             15500   Time:           61.0000
+ Temperature:   285.8821
+ Etot:         -491.3485   EKtot:         443.9775   EPtot:        -935.3261
+ Bond:          170.3887   Angle:         280.7413   Dihedral:      426.2083
+ Elec:        -1814.5226   vdW:             1.8582   Solvent:         0.0000
+\\\
+ Step:             16000   Time:           63.0000
+ Temperature:   296.9540
+ Etot:         -457.3609   EKtot:         461.1724   EPtot:        -918.5333
+ Bond:          195.5409   Angle:         279.9723   Dihedral:      410.5830
+ Elec:        -1798.1443   vdW:            -6.4852   Solvent:         0.0000
+\\\
+ Step:             16500   Time:           65.0000
+ Temperature:   305.2527
+ Etot:         -446.5233   EKtot:         474.0603   EPtot:        -920.5836
+ Bond:          199.3604   Angle:         272.6122   Dihedral:      422.8346
+ Elec:        -1795.7179   vdW:           -19.6729   Solvent:         0.0000
+\\\
+ Step:             17000   Time:           67.0000
+ Temperature:   319.4532
+ Etot:         -398.2221   EKtot:         496.1138   EPtot:        -894.3359
+ Bond:          173.1795   Angle:         283.2636   Dihedral:      428.7379
+ Elec:        -1754.9595   vdW:           -24.5573   Solvent:         0.0000
+\\\
+ Step:             17500   Time:           69.0000
+ Temperature:   301.5961
+ Etot:         -471.4719   EKtot:         468.3816   EPtot:        -939.8535
+ Bond:          183.1323   Angle:         247.5022   Dihedral:      426.7754
+ Elec:        -1781.3669   vdW:           -15.8964   Solvent:         0.0000
+\\\
+ Step:             18000   Time:           71.0000
+ Temperature:   292.5823
+ Etot:         -480.2623   EKtot:         454.3831   EPtot:        -934.6454
+ Bond:          186.4361   Angle:         279.5641   Dihedral:      423.1168
+ Elec:        -1799.9224   vdW:           -23.8401   Solvent:         0.0000
+\\\
+ Step:             18500   Time:           73.0000
+ Temperature:   291.4970
+ Etot:         -457.0760   EKtot:         452.6975   EPtot:        -909.7735
+ Bond:          196.8997   Angle:         263.8831   Dihedral:      429.3439
+ Elec:        -1783.9379   vdW:           -15.9622   Solvent:         0.0000
+\\\
+ Step:             19000   Time:           75.0000
+ Temperature:   304.0402
+ Etot:         -453.5615   EKtot:         472.1772   EPtot:        -925.7387
+ Bond:          179.5833   Angle:         297.0617   Dihedral:      413.2444
+ Elec:        -1789.9453   vdW:           -25.6828   Solvent:         0.0000
+\\\
+ Step:             19500   Time:           77.0000
+ Temperature:   292.4547
+ Etot:         -512.8614   EKtot:         454.1849   EPtot:        -967.0463
+ Bond:          181.9489   Angle:         262.3245   Dihedral:      412.5343
+ Elec:        -1801.8503   vdW:           -22.0038   Solvent:         0.0000
+\\\
+ Step:             20000   Time:           79.0000
+ Temperature:   309.3292
+ Etot:         -519.6358   EKtot:         480.3911   EPtot:       -1000.0269
+ Bond:          191.8551   Angle:         260.2436   Dihedral:      427.2640
+ Elec:        -1860.0195   vdW:           -19.3701   Solvent:         0.0000
+\\\
+ Step:             20500   Time:           81.0000
+ Temperature:   325.6111
+ Etot:         -479.5202   EKtot:         505.6770   EPtot:        -985.1972
+ Bond:          191.2131   Angle:         257.4818   Dihedral:      418.2953
+ Elec:        -1836.3819   vdW:           -15.8056   Solvent:         0.0000
+\\\
+ Step:             21000   Time:           83.0000
+ Temperature:   299.5988
+ Etot:         -541.7802   EKtot:         465.2798   EPtot:       -1007.0600
+ Bond:          202.8050   Angle:         269.8106   Dihedral:      416.6245
+ Elec:        -1870.1125   vdW:           -26.1876   Solvent:         0.0000
+\\\
+ Step:             21500   Time:           85.0000
+ Temperature:   296.4767
+ Etot:         -588.5138   EKtot:         460.4310   EPtot:       -1048.9448
+ Bond:          193.8677   Angle:         256.5313   Dihedral:      423.9373
+ Elec:        -1893.1340   vdW:           -30.1471   Solvent:         0.0000
+\\\
+ Step:             22000   Time:           87.0000
+ Temperature:   297.4486
+ Etot:         -569.2822   EKtot:         461.9405   EPtot:       -1031.2227
+ Bond:          192.1516   Angle:         268.8283   Dihedral:      429.0541
+ Elec:        -1899.7210   vdW:           -21.5357   Solvent:         0.0000
+\\\
+ Step:             22500   Time:           89.0000
+ Temperature:   287.1714
+ Etot:         -578.6182   EKtot:         445.9799   EPtot:       -1024.5981
+ Bond:          181.7725   Angle:         269.1892   Dihedral:      423.8088
+ Elec:        -1869.1785   vdW:           -30.1901   Solvent:         0.0000
+\\\
+ Step:             23000   Time:           91.0000
+ Temperature:   291.2849
+ Etot:         -615.0203   EKtot:         452.3681   EPtot:       -1067.3884
+ Bond:          177.3386   Angle:         265.4774   Dihedral:      421.7812
+ Elec:        -1891.4124   vdW:           -40.5732   Solvent:         0.0000
+\\\
+ Step:             23500   Time:           93.0000
+ Temperature:   293.8571
+ Etot:         -567.2522   EKtot:         456.3629   EPtot:       -1023.6151
+ Bond:          191.6698   Angle:         277.3052   Dihedral:      439.4661
+ Elec:        -1894.6513   vdW:           -37.4049   Solvent:         0.0000
+\\\
+ Step:             24000   Time:           95.0000
+ Temperature:   278.8183
+ Etot:         -624.6894   EKtot:         433.0074   EPtot:       -1057.6967
+ Bond:          159.6857   Angle:         275.4301   Dihedral:      430.9611
+ Elec:        -1878.7305   vdW:           -45.0431   Solvent:         0.0000
+\\\
+ Step:             24500   Time:           97.0000
+ Temperature:   305.5607
+ Etot:         -561.9546   EKtot:         474.5387   EPtot:       -1036.4933
+ Bond:          163.6323   Angle:         280.0243   Dihedral:      423.7784
+ Elec:        -1876.2892   vdW:           -27.6391   Solvent:         0.0000
+\\\
+ Step:             25000   Time:           99.0000
+ Temperature:   301.3109
+ Etot:         -580.3550   EKtot:         467.9386   EPtot:       -1048.2935
+ Bond:          182.5216   Angle:         273.7570   Dihedral:      436.5676
+ Elec:        -1893.1656   vdW:           -47.9741   Solvent:         0.0000
+\\\
+ Step:             25500   Time:          101.0000
+ Temperature:   299.2991
+ Etot:         -552.4842   EKtot:         464.8144   EPtot:       -1017.2985
+ Bond:          202.3325   Angle:         254.1953   Dihedral:      438.1210
+ Elec:        -1862.5484   vdW:           -49.3988   Solvent:         0.0000
+\\\
+ Step:             26000   Time:          103.0000
+ Temperature:   296.0212
+ Etot:         -592.3969   EKtot:         459.7237   EPtot:       -1052.1206
+ Bond:          197.2455   Angle:         246.6625   Dihedral:      422.3244
+ Elec:        -1871.6041   vdW:           -46.7490   Solvent:         0.0000
+\\\
+ Step:             26500   Time:          105.0000
+ Temperature:   275.4977
+ Etot:         -612.2781   EKtot:         427.8506   EPtot:       -1040.1287
+ Bond:          189.0343   Angle:         271.2579   Dihedral:      433.0913
+ Elec:        -1882.4081   vdW:           -51.1041   Solvent:         0.0000
+\\\
+ Step:             27000   Time:          107.0000
+ Temperature:   296.4028
+ Etot:         -580.6727   EKtot:         460.3163   EPtot:       -1040.9890
+ Bond:          195.9837   Angle:         242.8567   Dihedral:      424.8929
+ Elec:        -1845.6923   vdW:           -59.0301   Solvent:         0.0000
+\\\
+ Step:             27500   Time:          109.0000
+ Temperature:   301.3916
+ Etot:         -570.6181   EKtot:         468.0639   EPtot:       -1038.6820
+ Bond:          190.4121   Angle:         281.8814   Dihedral:      421.7402
+ Elec:        -1878.0940   vdW:           -54.6218   Solvent:         0.0000
+\\\
+ Step:             28000   Time:          111.0000
+ Temperature:   291.4634
+ Etot:         -611.6872   EKtot:         452.6454   EPtot:       -1064.3326
+ Bond:          165.3918   Angle:         270.7056   Dihedral:      422.3244
+ Elec:        -1880.2437   vdW:           -42.5107   Solvent:         0.0000
+\\\
+ Step:             28500   Time:          113.0000
+ Temperature:   283.2699
+ Etot:         -582.0257   EKtot:         439.9208   EPtot:       -1021.9465
+ Bond:          193.3951   Angle:         273.9270   Dihedral:      429.7538
+ Elec:        -1900.6659   vdW:           -18.3565   Solvent:         0.0000
+\\\
+ Step:             29000   Time:          115.0000
+ Temperature:   282.3008
+ Etot:         -600.6432   EKtot:         438.4158   EPtot:       -1039.0590
+ Bond:          176.3221   Angle:         268.0877   Dihedral:      421.0065
+ Elec:        -1873.7590   vdW:           -30.7163   Solvent:         0.0000
+\\\
+ Step:             29500   Time:          117.0000
+ Temperature:   299.4395
+ Etot:         -578.4421   EKtot:         465.0324   EPtot:       -1043.4744
+ Bond:          194.2517   Angle:         274.7699   Dihedral:      425.1775
+ Elec:        -1888.7028   vdW:           -48.9707   Solvent:         0.0000
+\\\
+ Step:             30000   Time:          119.0000
+ Temperature:   286.2846
+ Etot:         -613.0228   EKtot:         444.6027   EPtot:       -1057.6256
+ Bond:          185.4499   Angle:         256.0893   Dihedral:      440.4179
+ Elec:        -1904.6542   vdW:           -34.9284   Solvent:         0.0000
+\\\
+ Step:             30500   Time:          121.0000
+ Temperature:   293.4596
+ Etot:         -585.7638   EKtot:         455.7455   EPtot:       -1041.5094
+ Bond:          186.5735   Angle:         280.2042   Dihedral:      435.1333
+ Elec:        -1883.9282   vdW:           -59.4922   Solvent:         0.0000
+\\\
+ Step:             31000   Time:          123.0000
+ Temperature:   294.7471
+ Etot:         -587.1783   EKtot:         457.7449   EPtot:       -1044.9233
+ Bond:          213.9280   Angle:         275.7034   Dihedral:      416.1131
+ Elec:        -1898.4089   vdW:           -52.2590   Solvent:         0.0000
+\\\
+ Step:             31500   Time:          125.0000
+ Temperature:   299.5199
+ Etot:         -590.4963   EKtot:         465.1572   EPtot:       -1055.6536
+ Bond:          197.1122   Angle:         277.4566   Dihedral:      444.6685
+ Elec:        -1910.8564   vdW:           -64.0344   Solvent:         0.0000
+\\\
+ Step:             32000   Time:          127.0000
+ Temperature:   302.1194
+ Etot:         -573.5342   EKtot:         469.1942   EPtot:       -1042.7284
+ Bond:          210.4964   Angle:         271.0410   Dihedral:      431.6954
+ Elec:        -1916.6892   vdW:           -39.2720   Solvent:         0.0000
+\\\
+ Step:             32500   Time:          129.0000
+ Temperature:   304.3672
+ Etot:         -574.8446   EKtot:         472.6852   EPtot:       -1047.5297
+ Bond:          188.6527   Angle:         284.5226   Dihedral:      432.7690
+ Elec:        -1884.6789   vdW:           -68.7951   Solvent:         0.0000
+\\\
+ Step:             33000   Time:          131.0000
+ Temperature:   320.8872
+ Etot:         -533.0314   EKtot:         498.3409   EPtot:       -1031.3723
+ Bond:          198.6025   Angle:         273.3555   Dihedral:      418.6836
+ Elec:        -1894.3331   vdW:           -27.6808   Solvent:         0.0000
+\\\
+ Step:             33500   Time:          133.0000
+ Temperature:   277.0695
+ Etot:         -639.8211   EKtot:         430.2915   EPtot:       -1070.1127
+ Bond:          172.4800   Angle:         269.9426   Dihedral:      422.2490
+ Elec:        -1905.1788   vdW:           -29.6056   Solvent:         0.0000
+\\\
+ Step:             34000   Time:          135.0000
+ Temperature:   319.4296
+ Etot:         -559.1496   EKtot:         496.0771   EPtot:       -1055.2266
+ Bond:          183.3311   Angle:         247.1122   Dihedral:      422.2254
+ Elec:        -1862.4845   vdW:           -45.4109   Solvent:         0.0000
+\\\
+ Step:             34500   Time:          137.0000
+ Temperature:   311.5137
+ Etot:         -554.3116   EKtot:         483.7837   EPtot:       -1038.0953
+ Bond:          198.1895   Angle:         274.6749   Dihedral:      413.8960
+ Elec:        -1879.1100   vdW:           -45.7457   Solvent:         0.0000
+\\\
+ Step:             35000   Time:          139.0000
+ Temperature:   298.4476
+ Etot:         -621.9970   EKtot:         463.4919   EPtot:       -1085.4889
+ Bond:          187.6705   Angle:         254.0279   Dihedral:      406.2203
+ Elec:        -1903.7223   vdW:           -29.6854   Solvent:         0.0000
+\\\
+ Step:             35500   Time:          141.0000
+ Temperature:   301.0032
+ Etot:         -632.2939   EKtot:         467.4608   EPtot:       -1099.7547
+ Bond:          176.0289   Angle:         234.5142   Dihedral:      417.2216
+ Elec:        -1892.1031   vdW:           -35.4164   Solvent:         0.0000
+\\\
+ Step:             36000   Time:          143.0000
+ Temperature:   300.8534
+ Etot:         -617.8066   EKtot:         467.2281   EPtot:       -1085.0347
+ Bond:          189.8752   Angle:         252.0000   Dihedral:      408.9623
+ Elec:        -1884.3027   vdW:           -51.5695   Solvent:         0.0000
+\\\
+ Step:             36500   Time:          145.0000
+ Temperature:   311.7420
+ Etot:         -587.7343   EKtot:         484.1382   EPtot:       -1071.8725
+ Bond:          185.2418   Angle:         281.4177   Dihedral:      416.9559
+ Elec:        -1907.2812   vdW:           -48.2067   Solvent:         0.0000
+\\\
+ Step:             37000   Time:          147.0000
+ Temperature:   294.1577
+ Etot:         -636.5724   EKtot:         456.8297   EPtot:       -1093.4020
+ Bond:          188.7764   Angle:         241.1156   Dihedral:      423.1131
+ Elec:        -1910.0342   vdW:           -36.3731   Solvent:         0.0000
+\\\
+ Step:             37500   Time:          149.0000
+ Temperature:   305.8869
+ Etot:         -626.8589   EKtot:         475.0452   EPtot:       -1101.9040
+ Bond:          182.9941   Angle:         261.4471   Dihedral:      410.3623
+ Elec:        -1893.6974   vdW:           -63.0101   Solvent:         0.0000
+\\\
+ Step:             38000   Time:          151.0000
+ Temperature:   298.8246
+ Etot:         -615.7907   EKtot:         464.0773   EPtot:       -1079.8680
+ Bond:          188.7752   Angle:         258.3695   Dihedral:      417.7537
+ Elec:        -1904.8503   vdW:           -39.9162   Solvent:         0.0000
+\\\
+ Step:             38500   Time:          153.0000
+ Temperature:   293.8554
+ Etot:         -633.4115   EKtot:         456.3602   EPtot:       -1089.7718
+ Bond:          181.8443   Angle:         261.8790   Dihedral:      414.9008
+ Elec:        -1897.6430   vdW:           -50.7530   Solvent:         0.0000
+\\\
+ Step:             39000   Time:          155.0000
+ Temperature:   296.3309
+ Etot:         -630.2080   EKtot:         460.2047   EPtot:       -1090.4127
+ Bond:          190.4988   Angle:         261.5439   Dihedral:      420.0837
+ Elec:        -1906.7512   vdW:           -55.7879   Solvent:         0.0000
+\\\
+ Step:             39500   Time:          157.0000
+ Temperature:   285.1571
+ Etot:         -648.1013   EKtot:         442.8517   EPtot:       -1090.9529
+ Bond:          189.0456   Angle:         257.8265   Dihedral:      412.0242
+ Elec:        -1895.4620   vdW:           -54.3872   Solvent:         0.0000
+\\\
+ Step:             40000   Time:          159.0000
+ Temperature:   299.6885
+ Etot:         -612.1605   EKtot:         465.4190   EPtot:       -1077.5796
+ Bond:          179.7828   Angle:         268.3745   Dihedral:      413.1873
+ Elec:        -1911.7518   vdW:           -27.1725   Solvent:         0.0000
+\\\
+ Step:             40500   Time:          161.0000
+ Temperature:   307.4366
+ Etot:         -600.1809   EKtot:         477.4519   EPtot:       -1077.6328
+ Bond:          197.8328   Angle:         265.6148   Dihedral:      426.2752
+ Elec:        -1920.0623   vdW:           -47.2934   Solvent:         0.0000
+\\\
+ Step:             41000   Time:          163.0000
+ Temperature:   278.0109
+ Etot:         -678.6212   EKtot:         431.7535   EPtot:       -1110.3747
+ Bond:          187.5671   Angle:         247.3161   Dihedral:      423.5659
+ Elec:        -1925.8317   vdW:           -42.9921   Solvent:         0.0000
+\\\
+ Step:             41500   Time:          165.0000
+ Temperature:   291.0116
+ Etot:         -643.8335   EKtot:         451.9438   EPtot:       -1095.7773
+ Bond:          206.8870   Angle:         252.5399   Dihedral:      409.6367
+ Elec:        -1922.6616   vdW:           -42.1793   Solvent:         0.0000
+\\\
+ Step:             42000   Time:          167.0000
+ Temperature:   302.9422
+ Etot:         -606.5910   EKtot:         470.4721   EPtot:       -1077.0631
+ Bond:          199.0268   Angle:         241.3380   Dihedral:      431.0917
+ Elec:        -1913.8747   vdW:           -34.6448   Solvent:         0.0000
+\\\
+ Step:             42500   Time:          169.0000
+ Temperature:   296.0878
+ Etot:         -662.7498   EKtot:         459.8271   EPtot:       -1122.5769
+ Bond:          170.6833   Angle:         267.1465   Dihedral:      419.9332
+ Elec:        -1932.0821   vdW:           -48.2578   Solvent:         0.0000
+\\\
+ Step:             43000   Time:          171.0000
+ Temperature:   309.5735
+ Etot:         -610.5913   EKtot:         480.7705   EPtot:       -1091.3619
+ Bond:          203.0475   Angle:         278.3788   Dihedral:      414.9834
+ Elec:        -1930.7762   vdW:           -56.9955   Solvent:         0.0000
+\\\
+ Step:             43500   Time:          173.0000
+ Temperature:   299.7319
+ Etot:         -677.9550   EKtot:         465.4865   EPtot:       -1143.4415
+ Bond:          170.7141   Angle:         236.3448   Dihedral:      411.8977
+ Elec:        -1918.2278   vdW:           -44.1703   Solvent:         0.0000
+\\\
+ Step:             44000   Time:          175.0000
+ Temperature:   304.2906
+ Etot:         -628.1815   EKtot:         472.5661   EPtot:       -1100.7476
+ Bond:          177.7861   Angle:         255.5606   Dihedral:      431.2221
+ Elec:        -1922.1105   vdW:           -43.2059   Solvent:         0.0000
+\\\
+ Step:             44500   Time:          177.0000
+ Temperature:   308.3007
+ Etot:         -590.8474   EKtot:         478.7939   EPtot:       -1069.6413
+ Bond:          194.3961   Angle:         267.1126   Dihedral:      429.1514
+ Elec:        -1908.3734   vdW:           -51.9281   Solvent:         0.0000
+\\\
+ Step:             45000   Time:          179.0000
+ Temperature:   294.2473
+ Etot:         -647.5734   EKtot:         456.9688   EPtot:       -1104.5422
+ Bond:          194.2745   Angle:         250.1687   Dihedral:      410.9761
+ Elec:        -1912.1082   vdW:           -47.8533   Solvent:         0.0000
+\\\
+ Step:             45500   Time:          181.0000
+ Temperature:   290.5729
+ Etot:         -628.3651   EKtot:         451.2624   EPtot:       -1079.6276
+ Bond:          209.1299   Angle:         252.9818   Dihedral:      428.7706
+ Elec:        -1928.0820   vdW:           -42.4279   Solvent:         0.0000
+\\\
+ Step:             46000   Time:          183.0000
+ Temperature:   300.0551
+ Etot:         -654.0910   EKtot:         465.9883   EPtot:       -1120.0794
+ Bond:          173.8168   Angle:         257.0980   Dihedral:      420.1029
+ Elec:        -1921.6417   vdW:           -49.4553   Solvent:         0.0000
+\\\
+ Step:             46500   Time:          185.0000
+ Temperature:   273.0747
+ Etot:         -630.4769   EKtot:         424.0876   EPtot:       -1054.5645
+ Bond:          188.4855   Angle:         301.6965   Dihedral:      428.0336
+ Elec:        -1931.2157   vdW:           -41.5644   Solvent:         0.0000
+\\\
+ Step:             47000   Time:          187.0000
+ Temperature:   298.1640
+ Etot:         -630.8810   EKtot:         463.0514   EPtot:       -1093.9324
+ Bond:          196.4693   Angle:         272.7714   Dihedral:      433.6649
+ Elec:        -1948.3516   vdW:           -48.4865   Solvent:         0.0000
+\\\
+ Step:             47500   Time:          189.0000
+ Temperature:   299.4645
+ Etot:         -656.2309   EKtot:         465.0712   EPtot:       -1121.3021
+ Bond:          166.9463   Angle:         255.5241   Dihedral:      424.8954
+ Elec:        -1932.0558   vdW:           -36.6121   Solvent:         0.0000
+\\\
+ Step:             48000   Time:          191.0000
+ Temperature:   303.8949
+ Etot:         -610.6515   EKtot:         471.9515   EPtot:       -1082.6030
+ Bond:          188.3943   Angle:         274.7721   Dihedral:      423.7301
+ Elec:        -1922.1037   vdW:           -47.3959   Solvent:         0.0000
+\\\
+ Step:             48500   Time:          193.0000
+ Temperature:   289.8060
+ Etot:         -654.2153   EKtot:         450.0714   EPtot:       -1104.2867
+ Bond:          172.4586   Angle:         276.4078   Dihedral:      416.2976
+ Elec:        -1930.6255   vdW:           -38.8253   Solvent:         0.0000
+\\\
+ Step:             49000   Time:          195.0000
+ Temperature:   287.9305
+ Etot:         -654.3738   EKtot:         447.1587   EPtot:       -1101.5325
+ Bond:          192.6905   Angle:         266.0284   Dihedral:      413.2901
+ Elec:        -1934.4139   vdW:           -39.1276   Solvent:         0.0000
+\\\
+ Step:             49500   Time:          197.0000
+ Temperature:   305.7676
+ Etot:         -619.7545   EKtot:         474.8599   EPtot:       -1094.6143
+ Bond:          183.1205   Angle:         261.6650   Dihedral:      417.6889
+ Elec:        -1920.2400   vdW:           -36.8488   Solvent:         0.0000
+
+
+% Averages over 50000 steps sampled at 100 points:
+%
+% Temperature:   298.7766
+% Etot:         -533.4350   EKtot:         464.0029   EPtot:        -997.4379
+% Bond:          187.5722   Angle:         264.6488   Dihedral:      421.8436
+% Elec:        -1840.1301   vdW:           -31.3723   Solvent:         0.0000
+
+% Root mean squared deviations over 50000 steps sampled at 100 points:
+%
+% Temperature:    10.7235
+% Etot:          105.2297   EKtot:          16.6537   EPtot:         100.1374
+% Bond:           11.6235   Angle:          13.3733   Dihedral:        8.7487
+% Elec:           92.7463   vdW:            17.8818   Solvent:         0.0000
+
+<++>-----------------------------------------------------------------------<++>
+
+<++>-----------------------------------------------------------------------<++>
+ (7.) TIMINGS
+
+ Run completed on Tue May 25 16:20:19 2021
+
+ Timings are expressed as a percentage of total tracked CPU execution time.
+
+ Segment                 Time / Percentage
+ ----------------------  ---------  ------
+ Setup                        0.00    0.00
+ Bonded Interactions          0.00    0.00
+ Cell Communication           0.00    0.00
+ Nonbonded Interactions       0.00    0.00
+ B-Spline Computation         0.00    0.00
+ Particle -> Mesh             0.00    0.00
+ Convolution Kernel           0.00    0.00
+ Fast Fourier Transform       0.00    0.00
+ Mesh -> Particle             0.00    0.00
+ Integration                  0.00    0.00
+ Constraints                  0.00    0.00
+ Thermostat                   0.00    0.00
+ Barostat                     0.00    0.00
+ Output Printing              6.32  100.00
+ Total CPU Time               6.32  100.00
+<++>-----------------------------------------------------------------------<++>
+$! Closing watermark.  DO NOT alter this segment of the file. !$
+<++>-----------------------------------------------------------------------<++>

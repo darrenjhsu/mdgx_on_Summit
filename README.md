@@ -1,11 +1,11 @@
 # mdgx_on_Summit
-Note to compile mdgx on Summit with CUDA enabled
+Note to compile `mdgx` on Summit with CUDA enabled
 
-I needed to use mdgx on Summit to simulate a lot of small systems using its CUDA feature. Turns out it was a bit hard to compile the code. Below is my note on how I got it to work - not tested though.
+I needed to use `mdgx` on Summit to simulate a lot of small systems using its CUDA feature. Turns out it was a bit hard to compile the code. Below is my note on how I got it to work - not tested though.
 
 The starting point was from this page: http://dev-archive.ambermd.org/202006/0000.html . The `summit_install.sh` script contains some valuable information.
 
-I was building the mdgx from AmberTools from **Amber20**.
+I was building the `mdgx` from `AmberTools` from **Amber20**.
 
 
 ## Setting up mdgx on Summit
@@ -115,4 +115,23 @@ make -j 8 | tee build.log
 make install | tee -a build.log
 ```
 
+## Testing
+
+With `mdgx` set up, let's test its speed and whether we actually got the CUDA to work.
+
+In the `tests` folder, go to `CPU` and run
+
+```bash
+/ccs/home/<userID>/software/amber/bin/mdgx -O -i mdgxCPU.in
+```
+
+Wait for a while and look at the output file `Pro1AIE_MTS.out` which prints timing information. A copy of my benchmarking is in the `ExampleOutput` folder. To run 5000 steps on a CPU, it took 25.56 seconds.
+
+Then let's test the GPU version. Go to `GPU` and run
+
+```bash
+/ccs/home/<userID>/software/amber/bin/mdgx.cuda -O -i mdgxGPU.in
+```
+
+This time to run 50000 steps on GPU, it took about 6.32 seconds. This is a 40x difference with 1 copy. On a GPU `mdgx.cuda` can run multiple copies simultaneously (up to 80 with a V100 GPU and this particular system). It took 9.23 seconds to run 80 copies, 50000 steps each. This is a throughput difference of 2215x.
 

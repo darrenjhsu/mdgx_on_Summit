@@ -38,7 +38,7 @@ module load gcc/6.4.0 spectrum-mpi cuda \
   openblas netlib-lapack fftw
 ```
 
-The following procedure assumes you have the source code for AmberTools (usually in a folder called `amber20_src` when you untar the file), and you want to install it to somewhere like `/ccs/home/<userID>/software/amber`. We will use `ccmake` from `cmake`.
+The following procedure assumes you have the source code for AmberTools (usually in a folder called `amber20_src` when you untar the file), and you want to install it to somewhere like `/ccs/home/<userID>/software/amber`. We will use `ccmake` from `cmake`. `ccmake` is the visual CMake configuration tool.
 
 ```bash
 cd /path/to/amber20_src
@@ -47,7 +47,7 @@ cd build
 ccmake ..
 ```
 
-`ccmake` is a visual CMake configuration tool. Right now the cache will be empty (if the `build` directory is empty to start with):
+Right now the cache will be empty (if the `build` directory is empty to start with):
 
 ```bash
 EMPTY CACHE
@@ -86,7 +86,7 @@ Configure again. This time it takes longer and starts checking various header fi
 DISABLE_TOOLS           addles;amberlite;ambpdb;antechamber;cifparse;cphstats;cpptraj;emil;etc;gbnsr6;gem.pmemd;leap;mm_pbsa;mmpbsa_py;moft;nab;ndiff-2.00;nfe-umbrella-slice;nmode;nmr_aux;packmol_memgen;paramfit;parmed;pbsa;pdb4amber;pymsmt;pysander;pytraj;reduce;rism;sander;saxs;sebomd;sff;sqm;xray;xtalutil
 ```
 
-As the option reads, this disables all other tools being built, saving considerable amount of time. Optionally, turn on `CMAKE_VERBOSE_MAKEFILE` also visible in the advanced mode if you find reading the compilation commands useful. Configure again. This time in the keys section, there is an additional option `[g] Generate`. Press `g` to generate. The program should exit itself.
+As the option reads, this disables all other tools being built, saving considerable amount of time. Optionally, turn on `CMAKE_VERBOSE_MAKEFILE` also visible in the advanced mode if you find reading the compilation commands useful. Configure again. This time in the keys section, there is an additional option `[g] Generate`. (If not, configure again.) Press `g` to generate. The program should exit itself.
 
 Before doing `make`, we need to add an additional line to the `CMakeLists.txt` in the `AmberTools/src/mdgx` folder:
 

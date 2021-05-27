@@ -10,10 +10,10 @@ I was building the `mdgx` from `AmberTools` from **Amber20**.
 
 ## Setting up mdgx on Summit
 
-First, install `miniconda` (kudos to https://github.com/BSDExabio/OpenMM-on-Summit)
+First, install `miniconda` (kudos to https://github.com/BSDExabio/OpenMM-on-Summit). If you had it, skip this step
 
 ```bash
-module load cuda/10.1.105 gcc/8.1.1
+module load cuda gcc/9.3.0
 wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-ppc64le.sh
 bash Miniconda3-latest-Linux-ppc64le.sh -b -p miniconda
 # Initialize your ~/.bash_profile
@@ -29,10 +29,10 @@ conda activate amber
 conda install numpy scipy matplotlib
 ```
 
-`module load` things
+`module load` things (***Note: Summit is due for upgrade on Jun 8-9, 2021 and module availabilities may change***)
 
 ```bash
-module load gcc/6.4.0 spectrum-mpi cuda \
+module load gcc/9.3.0 cuda \
   cmake readline zlib bzip2 boost \
   netcdf netcdf-cxx4 netcdf-fortran parallel-netcdf \
   openblas netlib-lapack fftw

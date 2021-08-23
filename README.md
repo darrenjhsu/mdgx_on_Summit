@@ -29,11 +29,11 @@ conda activate amber
 conda install numpy scipy matplotlib
 ```
 
-`module load` things (***Note: Summit is due for upgrade on Jun 8-9, 2021 and module availabilities may change***)
+`module load` things (***Note: (Aug 23) This is for RHEL 8 on Summit***)
 
 ```bash
 module load cmake readline zlib bzip2 boost \
-  netcdf netcdf-cxx4 netcdf-fortran parallel-netcdf \
+  netcdf-c netcdf-cxx netcdf-fortran parallel-netcdf \
   openblas netlib-lapack fftw
 ```
 

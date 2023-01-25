@@ -41,8 +41,8 @@ The following procedure assumes you have the source code for AmberTools (usually
 
 ```bash
 cd /path/to/amber20_src
-mkdir build
-cd build
+mkdir build_summit
+cd build_summit
 ccmake ..
 ```
 
@@ -67,7 +67,7 @@ USE_HOST_TOOLS                  *OFF
 Make the following changes:
 
 ```bash
-CMAKE_INSTALL_PREFIX    /ccs/home/<userID>/software/amber
+CMAKE_INSTALL_PREFIX    /path/to/amber20_src/build_summit
 COMPILER                GNU
 ```
 
@@ -110,7 +110,7 @@ Now return to the `build` folder and build
 
 ```bash
 cd ../../../build
-make -j 8 | tee build.log
+make -j 16 | tee build.log
 make install | tee -a build.log
 ```
 

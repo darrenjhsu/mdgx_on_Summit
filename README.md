@@ -74,6 +74,8 @@ DISABLE_TOOLS           addles;amberlite;ambpdb;antechamber;cifparse;cphstats;cp
 
 As the option reads, this disables all other tools being built, saving considerable amount of time. Optionally, turn on `CMAKE_VERBOSE_MAKEFILE` also visible in the advanced mode if you find reading the compilation commands useful. Configure again. This time in the keys section, there is an additional option `[g] Generate`. (If not, configure again.) Press `g` to generate. The program should exit itself.
 
+**If you used [the modified mdgx from me](https://github.com/darrenjhsu/mdgx_mod/tree/fix_atom) then skip to the build step below**
+
 Before doing `make`, we need to add an additional line to the `CMakeLists.txt` in the `AmberTools/src/mdgx` folder:
 
 ```bash
@@ -93,10 +95,12 @@ Below it, add this line. It forces the C and C++ compilers to take the `-DCUDA` 
 target_compile_options(mdgx.cuda PRIVATE $<$<COMPILE_LANGUAGE:CXX>:-DCUDA> $<$<COMPILE_LANGUAGE:C>:-DCUDA>)
 ```
 
+**If you used [the modified mdgx from me](https://github.com/darrenjhsu/mdgx_mod/tree/fix_atom) then follow from the step below**
+
 Now return to the `build` folder and build
 
 ```bash
-cd ../../../build
+cd ../../../build_summit
 make -j 16 | tee build.log
 make install | tee -a build.log
 ```
@@ -108,7 +112,7 @@ With `mdgx` set up, let's test its speed and whether we actually got the CUDA to
 In the `tests` folder, go to `CPU` and run
 
 ```bash
-/ccs/home/<userID>/software/amber/bin/mdgx -O -i mdgxCPU.in
+/path/to/amber20_src/build_summit/bin/mdgx -O -i mdgxCPU.in
 ```
 
 Wait for a while and look at the output file `Pro1AIE_MTS.out` which prints timing information. A copy of my benchmarking is in the `ExampleOutput` folder. To run 5000 steps on a CPU, it took 25.56 seconds.
@@ -116,7 +120,7 @@ Wait for a while and look at the output file `Pro1AIE_MTS.out` which prints timi
 Then let's test the GPU version. Go to `GPU` and run
 
 ```bash
-/ccs/home/<userID>/software/amber/bin/mdgx.cuda -O -i mdgxGPU.in
+/path/to/amber20_src/build_summit/bin/mdgx.cuda -O -i mdgxGPU.in
 ```
 
 This time to run 50000 steps on GPU, it took about 6.32 seconds. This is a 40x difference with 1 copy. On a GPU `mdgx.cuda` can run multiple copies simultaneously (up to 80 with a V100 GPU and this particular system). It took 9.23 seconds to run 80 copies, 50000 steps each. This is a throughput difference of 2215x.

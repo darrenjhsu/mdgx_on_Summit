@@ -10,29 +10,10 @@ I was building the `mdgx` from `AmberTools` from **Amber20**.
 
 ## Setting up mdgx on Summit
 
-First, install `miniconda` (kudos to https://github.com/BSDExabio/OpenMM-on-Summit). If you had it, skip this step
+First, `module load` things (***Note: (Aug 23) This is for RHEL 8 on Summit***)
 
 ```bash
-module load cuda/11.0.3 gcc/9.3.0
-wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-ppc64le.sh
-bash Miniconda3-latest-Linux-ppc64le.sh -b -p miniconda
-# Initialize your ~/.bash_profile
-miniconda/bin/conda init bash
-source ~/.bashrc
-```
-
-Create an environment and install some packages for amber
-
-```bash
-conda create -n amber python==3.7
-conda activate amber
-conda install numpy scipy matplotlib
-```
-
-`module load` things (***Note: (Aug 23) This is for RHEL 8 on Summit***)
-
-```bash
-module load cmake readline zlib bzip2 boost \
+module load cuda/11.0.3 gcc/9.3.0 cmake readline zlib bzip2 boost \
   netcdf-c netcdf-cxx netcdf-fortran parallel-netcdf \
   openblas netlib-lapack fftw
 ```
@@ -77,6 +58,12 @@ Configure again, this time it complains about the Python environment. Press `e` 
 CUDA                    ON
 DOWNLOAD_MINICONDA      OFF
 OPENMP                  ON
+```
+
+Configure again. This time it complains about python. Since we're not using any of the python bindings anyway, let's just disable it.
+
+```bash
+BUILD_PYTHON            OFF
 ```
 
 Configure again. This time it takes longer and starts checking various header files. When it's done without errors, return to the options, press `t` to toggle advanced mode (there will be many more options), and make the following changes (use `/` to search for an option):
